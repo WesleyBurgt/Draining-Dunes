@@ -10,6 +10,9 @@ public class CarControl : MonoBehaviour
     public float steeringRange = 30f;
     public float steeringRangeAtMaxSpeed = 10f;
     public float centreOfGravityOffset = -1f;
+    public float antiRollValue = 1500f;
+    public float FuelTankSize = 100f;
+    public float Fuel = 100f;
 
     private WheelControl[] wheels;
     private Rigidbody rigidBody;
@@ -17,8 +20,7 @@ public class CarControl : MonoBehaviour
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
     [HideInInspector] public float damagePercentage = 0f;
-    public float FuelTankSize = 100f;
-    public float Fuel = 100f;
+
 
     void Awake()
     {
@@ -101,6 +103,45 @@ public class CarControl : MonoBehaviour
             {
                 wheel.WheelCollider.motorTorque = 0f;
                 wheel.WheelCollider.brakeTorque = Mathf.Abs(throttleInput) * brakeTorque;
+            }
+        }
+
+        AntiRoll();
+    }
+
+    private void AntiRoll()
+    {
+        float travelL = 1.0f;
+        float travelR = 1.0f;
+        foreach(WheelControl wheel in wheels)
+        {
+            WheelCollider wheelCollider = wheel.WheelCollider;
+            bool grounded = wheelCollider.GetGroundHit(out WheelHit wheelHit);
+
+            if (grounded)
+            {
+                float travel = (-wheelCollider.transform.InverseTransformPoint(wheelHit.point).y - wheelCollider.radius) / wheelCollider.suspensionDistance;
+                if (wheel.leftSide)
+                {
+                    travelL += travel;
+                }
+                else
+                {
+                    travelR += travel;
+                }
+            }
+        }
+
+        float antiRollForce = (travelL - travelR) * antiRollValue;
+
+        foreach(WheelControl wheel in wheels)
+        {
+            WheelCollider wheelCollider = wheel.WheelCollider;
+            bool grounded = wheelCollider.GetGroundHit(out WheelHit wheelHit);
+
+            if (grounded)
+            {
+                rigidBody.AddForceAtPosition(wheelCollider.transform.up * -antiRollForce, wheelCollider.transform.position);
             }
         }
     }

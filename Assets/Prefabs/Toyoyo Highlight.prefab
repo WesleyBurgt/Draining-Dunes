@@ -88,6 +88,7 @@ MonoBehaviour:
   WheelCollider: {fileID: 0}
   steerable: 0
   motorized: 1
+  leftSide: 0
 --- !u!1 &5633691380772159672
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,6 +177,7 @@ MonoBehaviour:
   WheelCollider: {fileID: 0}
   steerable: 1
   motorized: 1
+  leftSide: 0
 --- !u!1 &7071426097971754284
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,6 +266,7 @@ MonoBehaviour:
   WheelCollider: {fileID: 0}
   steerable: 1
   motorized: 1
+  leftSide: 1
 --- !u!1 &8128659807507892326
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,6 +355,7 @@ MonoBehaviour:
   WheelCollider: {fileID: 0}
   steerable: 0
   motorized: 1
+  leftSide: 1
 --- !u!1001 &2966634476620453791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -501,15 +505,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7c8c2335a74584199f34da3216cb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motorTorque: 2000
-  brakeTorque: 2000
-  maxSpeed: 20
+  motorTorque: 2500
+  brakeTorque: 4000
+  maxSpeed: 100
   steeringRange: 30
-  steeringRangeAtMaxSpeed: 10
-  centreOfGravityOffset: -1
-  damagePercentage: 0
+  steeringRangeAtMaxSpeed: 15
+  centreOfGravityOffset: -0.9
+  antiRollValue: 1400
   FuelTankSize: 100
   Fuel: 100
+  damagePercentage: 0
 --- !u!4 &2994190596486614799 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 46753628320815248, guid: c6f617ba357cee24f853414a5750faad, type: 3}
