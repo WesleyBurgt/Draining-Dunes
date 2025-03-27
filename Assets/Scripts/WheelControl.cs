@@ -8,6 +8,7 @@ public class WheelControl : MonoBehaviour
 
     public bool steerable;
     public bool motorized;
+    public bool leftSide;
 
     Vector3 position;
     Quaternion rotation;
