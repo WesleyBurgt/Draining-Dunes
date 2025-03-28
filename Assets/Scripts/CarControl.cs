@@ -19,7 +19,9 @@ public class CarControl : MonoBehaviour
     private WheelControl[] wheels;
     private Rigidbody rigidBody;
     private CarInputActions carControls;
+    
     private float oldRotation;
+    private float collisionSpeed;
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
     [HideInInspector] public float damagePercentage = 0f;
@@ -50,8 +52,6 @@ public class CarControl : MonoBehaviour
         wheels = GetComponentsInChildren<WheelControl>();
     }
 
-    private float collisionSpeed;
-
     void OnCollisionEnter(Collision collision)
     {
         collisionSpeed = CurrentSpeed;
@@ -67,31 +67,31 @@ public class CarControl : MonoBehaviour
     void FixedUpdate()
     {
         Vector2 inputVector = carControls.Car.Movement.ReadValue<Vector2>();
-
         float throttleInput = inputVector.y;
         float steeringInput = inputVector.x;
 
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         float speedFactor = Mathf.InverseLerp(0, maxSpeed, Mathf.Abs(forwardSpeed));
 
-        bool canAccelerate = Fuel > 0 && damagePercentage < 100;
-
         float motorTorqueWithDamage = motorTorque * (100 - damagePercentage) / 100;
         float currentMotorTorque = Mathf.Lerp(motorTorqueWithDamage, 0, speedFactor);
         float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
+        bool canAccelerate = Fuel > 0 && damagePercentage < 100;
         bool isAccelerating = (Mathf.Sign(throttleInput) == Mathf.Sign(forwardSpeed)) && throttleInput != 0;
                 
-        SteerHelper();
+        ApplyDrive(isAccelerating, canAccelerate, throttleInput, currentMotorTorque);
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
 
+        ApplySteering(steeringInput, currentSteerRange);
+        SteerHelper();
+        AntiRoll();
+    }
+
+    private void ApplyDrive(bool isAccelerating, bool canAccelerate, float throttleInput, float currentMotorTorque)
+    {
         foreach (var wheel in wheels)
         {
-            if (wheel.steerable)
-            {
-                wheel.WheelCollider.steerAngle = steeringInput * currentSteerRange;
-            }
-
             if (isAccelerating)
             {
                 if (canAccelerate && wheel.motorized)
@@ -110,8 +110,17 @@ public class CarControl : MonoBehaviour
                 wheel.WheelCollider.brakeTorque = Mathf.Abs(throttleInput) * brakeTorque;
             }
         }
+    }
 
-        AntiRoll();
+    private void ApplySteering(float steeringInput, float currentSteerRange)
+    {
+        foreach (var wheel in wheels)
+        {
+            if (wheel.steerable)
+            {
+                wheel.WheelCollider.steerAngle = steeringInput * currentSteerRange;
+            }
+        }
     }
 
     private void SteerHelper()
