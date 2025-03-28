@@ -13,10 +13,13 @@ public class CarControl : MonoBehaviour
     public float antiRollValue = 1500f;
     public float FuelTankSize = 100f;
     public float Fuel = 100f;
+    [Tooltip("0 is pure physics, 1 the car will grip in the direction it's facing.")]
+    [SerializeField, Range(0, 1)] private float _steerHelper;
 
     private WheelControl[] wheels;
     private Rigidbody rigidBody;
     private CarInputActions carControls;
+    private float oldRotation;
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
     [HideInInspector] public float damagePercentage = 0f;
@@ -78,6 +81,8 @@ public class CarControl : MonoBehaviour
         float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
         bool isAccelerating = (Mathf.Sign(throttleInput) == Mathf.Sign(forwardSpeed)) && throttleInput != 0;
+                
+        SteerHelper();
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
 
         foreach (var wheel in wheels)
@@ -107,6 +112,25 @@ public class CarControl : MonoBehaviour
         }
 
         AntiRoll();
+    }
+
+    private void SteerHelper()
+    {
+        foreach (WheelControl wheel in wheels)
+        {
+            wheel.WheelCollider.GetGroundHit(out WheelHit wheelHit);
+            if (wheelHit.normal == Vector3.zero)
+                return;
+        }
+
+        if (Mathf.Abs(oldRotation - transform.eulerAngles.y) < 10f)
+        {
+            float turnAdjust = (transform.eulerAngles.y - oldRotation) * _steerHelper;
+            Quaternion velRotation = Quaternion.AngleAxis(turnAdjust, Vector3.up);
+            rigidBody.linearVelocity = velRotation * rigidBody.linearVelocity;
+        }
+
+        oldRotation = transform.eulerAngles.y;
     }
 
     private void AntiRoll()

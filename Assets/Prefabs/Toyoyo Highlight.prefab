@@ -509,11 +509,12 @@ MonoBehaviour:
   brakeTorque: 4000
   maxSpeed: 100
   steeringRange: 30
-  steeringRangeAtMaxSpeed: 15
-  centreOfGravityOffset: -0.9
+  steeringRangeAtMaxSpeed: 10
+  centreOfGravityOffset: -1
   antiRollValue: 1400
   FuelTankSize: 100
   Fuel: 100
+  _steerHelper: 0.2
   damagePercentage: 0
 --- !u!4 &2994190596486614799 stripped
 Transform:
