@@ -529,3 +529,4 @@ MonoBehaviour:
   _fuelText: {fileID: 7339966416387944732}
   _damageText: {fileID: 2956311037510030602}
   _carController: {fileID: 0}
+  _speedScale: 0.45
