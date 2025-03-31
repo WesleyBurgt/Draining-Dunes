@@ -44,14 +44,17 @@ public class CarControl : MonoBehaviour
     void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
+        OffsetCenterOfGravity();
+        wheels = GetComponentsInChildren<WheelControl>();
+    }
 
+    private void OffsetCenterOfGravity()
+    {
         Vector3 centerOfMass = rigidBody.centerOfMass;
         centerOfMass.x += centerOfGravityOffset.x;
         centerOfMass.y += centerOfGravityOffset.y;
         centerOfMass.z += centerOfGravityOffset.z;
         rigidBody.centerOfMass = centerOfMass;
-
-        wheels = GetComponentsInChildren<WheelControl>();
     }
 
     void OnCollisionEnter(Collision collision)
