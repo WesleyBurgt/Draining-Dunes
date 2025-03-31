@@ -9,7 +9,7 @@ public class CarControl : MonoBehaviour
     public float maxSpeed = 20f;
     public float steeringRange = 30f;
     public float steeringRangeAtMaxSpeed = 10f;
-    public float centreOfGravityOffset = -1f;
+    public Vector3 centerOfGravityOffset = new Vector3(0, -1, 0);
     public float antiRollValue = 1500f;
     public float FuelTankSize = 100f;
     public float Fuel = 100f;
@@ -46,7 +46,9 @@ public class CarControl : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
 
         Vector3 centerOfMass = rigidBody.centerOfMass;
-        centerOfMass.y += centreOfGravityOffset;
+        centerOfMass.x += centerOfGravityOffset.x;
+        centerOfMass.y += centerOfGravityOffset.y;
+        centerOfMass.z += centerOfGravityOffset.z;
         rigidBody.centerOfMass = centerOfMass;
 
         wheels = GetComponentsInChildren<WheelControl>();
