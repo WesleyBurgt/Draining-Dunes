@@ -25,6 +25,7 @@ public class CarControl : MonoBehaviour
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
     [HideInInspector] public float damagePercentage = 0f;
+    public int money = 0;
 
 
     void Awake()
