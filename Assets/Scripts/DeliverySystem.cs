@@ -3,23 +3,21 @@ using UnityEngine;
 
 public class DeliverySystem : MonoBehaviour
 {
-    #nullable enable 
-    
+#nullable enable
+
     private DeliveryPort[] deliveryPorts;
+    public CarControl carControl;
+    public DeliveryMission? currentMission;
     public DeliveryPort? CurrentDestinationDeliveryPort { get { return GetCurrentDestinationDeliveryPort(); } }
+    public int baseMissionReward = 100;
+    public float missionRewardDistanceMultiplier = 1f;
+    public float missionRewardSpeedMultiplier = 1f;
 
     System.Random random = new System.Random();
 
     DeliveryPort? GetCurrentDestinationDeliveryPort()
     {
-        foreach (var deliveryPort in deliveryPorts)
-        {
-            if (deliveryPort.destination == true)
-            {
-                return deliveryPort;
-            }
-        }
-        return null;
+        return currentMission?.endDeliveryPort;
     }
 
     void Start()
@@ -29,30 +27,66 @@ public class DeliverySystem : MonoBehaviour
 
     void Update()
     {
+        HandleMissionSigns();
+    }
+
+    void HandleMissionSigns()
+    {
         foreach (DeliveryPort deliveryPort in deliveryPorts)
         {
-            if (deliveryPort.startMission)
+            switch (deliveryPort.missionSign)
             {
-                AssignMission(deliveryPort);
-                break;
+                case MissionSign.StartMission:
+                    {
+                        AssignMission(deliveryPort);
+                        RepairAndRefuelCar();
+                        return;
+                    }
+                case MissionSign.EndMission:
+                    {
+                        CompleteMission();
+                        RepairAndRefuelCar();
+                        return;
+                    }
             }
         }
     }
 
     void AssignMission(DeliveryPort deliveryPort)
     {
-        if (!MissionInProgress())
+        if (currentMission == null)
         {
-            DeliveryPort desinationDeliveryPort = GetRandomDeliveryPortExluding(deliveryPort);
-            desinationDeliveryPort.destination = true;
-            Debug.Log(desinationDeliveryPort.name);
+            DeliveryPort destinationDeliveryPort = GetRandomDeliveryPortExluding(deliveryPort);
+            DeliveryMission mission = new DeliveryMission(deliveryPort, destinationDeliveryPort, Time.time, baseMissionReward, missionRewardDistanceMultiplier, missionRewardSpeedMultiplier);
+            currentMission = mission;
         }
-        deliveryPort.startMission = false;
+
+        deliveryPort.missionSign = MissionSign.NoMission;
     }
 
-    bool MissionInProgress()
+    void CompleteMission()
     {
-        return deliveryPorts.Any(o => o.destination);
+        if (currentMission != null)
+        {
+            currentMission.RemoveFromDeliveryPorts();
+            carControl.money += currentMission.Reward(Time.time);
+            currentMission = null;
+        }
+    }
+
+    void RepairAndRefuelCar()
+    {
+        if (carControl.money >= Mathf.RoundToInt(carControl.damagePercentage))
+        {
+            carControl.money -= Mathf.RoundToInt(carControl.damagePercentage);
+            carControl.ResetDamage();
+        }
+
+        if (carControl.money >= Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel))
+        {
+            carControl.money -= Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel);
+            carControl.ResetFuel();
+        }
     }
 
     DeliveryPort GetRandomDeliveryPortExluding(DeliveryPort exludedDeliveryPort)

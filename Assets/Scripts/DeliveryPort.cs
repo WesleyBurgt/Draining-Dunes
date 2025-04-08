@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class DeliveryPort : MonoBehaviour
 {
-    public bool startMission = false;
-    public bool destination = false;
+    public DeliveryMission assignedMission;
+    public MissionSign missionSign = MissionSign.NoMission;
 
     void Start()
     {
@@ -18,17 +18,13 @@ public class DeliveryPort : MonoBehaviour
             return;
         }
 
-        carControl.ResetDamage();
-        carControl.ResetFuel();
-
-        if (this.destination)
+        if (assignedMission == null)
         {
-            destination = false;
-            carControl.money += 100;
+            missionSign = MissionSign.StartMission;
         }
-        else
+        else if (this == assignedMission.endDeliveryPort)
         {
-            startMission = true;
+            missionSign = MissionSign.EndMission;
         }
     }
 
