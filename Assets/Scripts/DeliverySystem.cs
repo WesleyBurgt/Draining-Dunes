@@ -55,11 +55,6 @@ public class DeliverySystem : MonoBehaviour
         return deliveryPorts.Any(o => o.destination);
     }
 
-    DeliveryPort CurrentDestinationDeliveryPoty()
-    {
-        return deliveryPorts.FirstOrDefault(o => o.destination);
-    }
-
     DeliveryPort GetRandomDeliveryPortExluding(DeliveryPort exludedDeliveryPort)
     {
         DeliveryPort[] filteredDeliveryPorts = deliveryPorts.Where(o => o != exludedDeliveryPort).ToArray();
