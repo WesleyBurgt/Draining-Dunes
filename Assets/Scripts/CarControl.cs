@@ -11,8 +11,6 @@ public class CarControl : MonoBehaviour
     public float steeringRangeAtMaxSpeed = 10f;
     public Vector3 centerOfGravityOffset = new Vector3(0, -1, 0);
     public float antiRollValue = 1500f;
-    public float FuelTankSize = 100f;
-    public float Fuel = 100f;
     [Tooltip("0 is pure physics, 1 the car will grip in the direction it's facing.")]
     [SerializeField, Range(0, 1)] private float _steerHelper;
 
@@ -24,7 +22,6 @@ public class CarControl : MonoBehaviour
     private float collisionSpeed;
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
-    [HideInInspector] public float damagePercentage = 0f;
 
 
     void Awake()
@@ -57,18 +54,6 @@ public class CarControl : MonoBehaviour
         rigidBody.centerOfMass = centerOfMass;
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
-        collisionSpeed = CurrentSpeed;
-    }
-
-    void OnCollisionExit(Collision collision)
-    {
-        float collisionReduction = Math.Abs(CurrentSpeed - collisionSpeed);
-        damagePercentage += collisionReduction * 10;
-        Debug.Log("collisionReduction: " + collisionReduction);
-    }
-
     void FixedUpdate()
     {
         Vector2 inputVector = carControls.Car.Movement.ReadValue<Vector2>();
@@ -78,28 +63,25 @@ public class CarControl : MonoBehaviour
         float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         float speedFactor = Mathf.InverseLerp(0, maxSpeed, Mathf.Abs(forwardSpeed));
 
-        float motorTorqueWithDamage = motorTorque * (100 - damagePercentage) / 100;
-        float currentMotorTorque = Mathf.Lerp(motorTorqueWithDamage, 0, speedFactor);
+        float currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
         float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
-        bool canAccelerate = Fuel > 0 && damagePercentage < 100;
         bool isAccelerating = (Mathf.Sign(throttleInput) == Mathf.Sign(forwardSpeed)) && throttleInput != 0;
                 
-        ApplyDrive(isAccelerating, canAccelerate, throttleInput, currentMotorTorque);
-        ApplyFuelUsage(isAccelerating, currentMotorTorque);
+        ApplyDrive(isAccelerating, throttleInput, currentMotorTorque);
 
         ApplySteering(steeringInput, currentSteerRange);
         SteerHelper();
         AntiRoll();
     }
 
-    private void ApplyDrive(bool isAccelerating, bool canAccelerate, float throttleInput, float currentMotorTorque)
+    private void ApplyDrive(bool isAccelerating, float throttleInput, float currentMotorTorque)
     {
         foreach (var wheel in wheels)
         {
             if (isAccelerating)
             {
-                if (canAccelerate && wheel.motorized)
+                if (wheel.motorized)
                 {
                     wheel.WheelCollider.motorTorque = throttleInput * currentMotorTorque;
                 }
@@ -182,35 +164,5 @@ public class CarControl : MonoBehaviour
                 rigidBody.AddForceAtPosition(wheelCollider.transform.up * -antiRollForce, wheelCollider.transform.position);
             }
         }
-    }
-
-    void ApplyFuelUsage(bool isAccelerating, float currentMotorTorque)
-    {
-        if (Fuel > 0)
-        {
-            float baseFuelLoss = 0.01f;
-            float damageFuelLossMultiplier = 0.0003f;
-            float torqueFuelLossMultiplier = 0.00001f;
-
-            float damageFuelLoss = damagePercentage * damageFuelLossMultiplier;
-            float torqueFuelLoss = (motorTorque - currentMotorTorque) * torqueFuelLossMultiplier;
-
-            float FuelUsage = baseFuelLoss + damageFuelLoss;
-            if (isAccelerating)
-            {
-                FuelUsage +=  torqueFuelLoss;
-            }
-            Fuel -= FuelUsage;
-        }
-    }
-
-    public void ResetFuel()
-    {
-        Fuel = FuelTankSize;
-    }
-
-    public void ResetDamage()
-    {
-        damagePercentage = 0;
     }
 }
