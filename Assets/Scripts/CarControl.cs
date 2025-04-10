@@ -83,7 +83,10 @@ public class CarControl : MonoBehaviour
         float currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 
         bool canAccelerate = Fuel > 0 && damagePercentage < 100;
-        bool isAccelerating = (Mathf.Sign(throttleInput) == Mathf.Sign(forwardSpeed)) && throttleInput != 0;
+
+        bool negligibleForwardSpeed = forwardSpeed > -0.1f && forwardSpeed < 0.1f;
+        bool signsAreSame = Mathf.Sign(throttleInput) == Mathf.Sign(forwardSpeed);
+        bool isAccelerating = (signsAreSame || negligibleForwardSpeed) && throttleInput != 0;
                 
         ApplyDrive(isAccelerating, canAccelerate, throttleInput, currentMotorTorque);
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
