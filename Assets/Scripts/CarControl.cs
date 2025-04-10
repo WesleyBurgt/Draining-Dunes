@@ -24,8 +24,8 @@ public class CarControl : MonoBehaviour
     private float collisionSpeed;
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
-    [HideInInspector] public float damagePercentage = 0f;
     public int money = 0;
+    public float damagePercentage = 0f;
 
 
     void Awake()
@@ -93,7 +93,7 @@ public class CarControl : MonoBehaviour
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
 
         ApplySteering(steeringInput, currentSteerRange);
-        SteerHelper();
+        SteeringAssist();
         AntiRoll();
     }
 
@@ -132,7 +132,7 @@ public class CarControl : MonoBehaviour
         }
     }
 
-    private void SteerHelper()
+    private void SteeringAssist()
     {
         foreach (WheelControl wheel in wheels)
         {
