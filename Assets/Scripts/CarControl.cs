@@ -24,13 +24,23 @@ public class CarControl : MonoBehaviour
     private float collisionSpeed;
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
-    [HideInInspector] public float damagePercentage = 0f;
+    [Range(0, 100)] public float damagePercentage = 0f;
 
+    void AddDamagePercentage(float addToDamagePercentage)
+    {
+        float newDamagePercentage = damagePercentage + addToDamagePercentage;
+        float minValue = 0f;
+        float maxValue = 100f;
+        float clampedDamagePercentage = Mathf.Clamp(newDamagePercentage, minValue, maxValue);
+
+        damagePercentage = clampedDamagePercentage;
+    }
 
     void Awake()
     {
         carControls = new CarInputActions();
     }
+
     void OnEnable()
     {
         carControls.Enable();
@@ -65,8 +75,7 @@ public class CarControl : MonoBehaviour
     void OnCollisionExit(Collision collision)
     {
         float collisionReduction = Math.Abs(CurrentSpeed - collisionSpeed);
-        damagePercentage += collisionReduction * 10;
-        Debug.Log("collisionReduction: " + collisionReduction);
+        AddDamagePercentage(collisionReduction * 10);
     }
 
     void FixedUpdate()
@@ -92,7 +101,7 @@ public class CarControl : MonoBehaviour
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
 
         ApplySteering(steeringInput, currentSteerRange);
-        SteerHelper();
+        SteeringAssist();
         AntiRoll();
     }
 
@@ -131,7 +140,7 @@ public class CarControl : MonoBehaviour
         }
     }
 
-    private void SteerHelper()
+    private void SteeringAssist()
     {
         foreach (WheelControl wheel in wheels)
         {

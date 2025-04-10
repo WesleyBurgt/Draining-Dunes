@@ -601,12 +601,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7c8c2335a74584199f34da3216cb76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motorTorque: 1200
+  motorTorque: 1500
   brakeTorque: 2000
   maxSpeed: 30
   steeringRange: 30
   steeringRangeAtMaxSpeed: 10
-  centerOfGravityOffset: {x: 0, y: -1, z: 0.4}
+  centerOfGravityOffset: {x: 0, y: -0.5, z: 0.4}
   antiRollValue: 1400
   FuelTankSize: 100
   Fuel: 100
