@@ -92,7 +92,7 @@ public class CarControl : MonoBehaviour
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
 
         ApplySteering(steeringInput, currentSteerRange);
-        SteerHelper();
+        SteeringAssist();
         AntiRoll();
     }
 
@@ -131,7 +131,7 @@ public class CarControl : MonoBehaviour
         }
     }
 
-    private void SteerHelper()
+    private void SteeringAssist()
     {
         foreach (WheelControl wheel in wheels)
         {
