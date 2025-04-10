@@ -24,13 +24,13 @@ public class CarControl : MonoBehaviour
     private float collisionSpeed;
 
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
-    public float damagePercentage = 0f;
-
+    [Range(0, 100)] public float damagePercentage = 0f;
 
     void Awake()
     {
         carControls = new CarInputActions();
     }
+
     void OnEnable()
     {
         carControls.Enable();
