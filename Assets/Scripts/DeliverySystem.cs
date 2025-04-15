@@ -28,13 +28,11 @@ public class DeliverySystem : MonoBehaviour
     void Update()
     {
         float MaxCarSpeedForHandlingMissions = 1f;
-        if (carControl.CurrentSpeed < MaxCarSpeedForHandlingMissions)
-        {
-            HandleMissionSigns();
-        }
+        bool mayHandleMissions = carControl.CurrentSpeed < MaxCarSpeedForHandlingMissions;
+        HandleMissionSigns(mayHandleMissions);
     }
 
-    void HandleMissionSigns()
+    void HandleMissionSigns(bool mayHandleMissions)
     {
         foreach (DeliveryPort deliveryPort in deliveryPorts)
         {
@@ -42,13 +40,25 @@ public class DeliverySystem : MonoBehaviour
             {
                 case MissionSign.StartMission:
                     {
-                        WantsToStartMissionDeliveryPort = deliveryPort;
-                        deliveryPort.missionSign = MissionSign.NoMission;
+                        if (mayHandleMissions)
+                        {
+                            WantsToStartMissionDeliveryPort = deliveryPort;
+                            deliveryPort.missionSign = MissionSign.NoMission;
+                        }
                         return;
                     }
                 case MissionSign.EndMission:
                     {
-                        CompleteMission();
+                        if (mayHandleMissions)
+                        {
+                            CompleteMission();
+                        }
+                        return;
+                    }
+                case MissionSign.CancelMission:
+                    {
+                        WantsToStartMissionDeliveryPort = null;
+                        deliveryPort.missionSign = MissionSign.NoMission;
                         return;
                     }
             }

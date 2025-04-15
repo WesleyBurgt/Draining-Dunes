@@ -14,7 +14,7 @@ public class DeliveryPort : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         CarControl carControl = other.gameObject.GetComponent<CarControl>();
-        if (carControl == null) 
+        if (carControl == null)
         {
             return;
         }
@@ -27,6 +27,17 @@ public class DeliveryPort : MonoBehaviour
         {
             missionSign = MissionSign.EndMission;
         }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        CarControl carControl = other.gameObject.GetComponent<CarControl>();
+        if (carControl == null)
+        {
+            return;
+        }
+
+        missionSign = MissionSign.CancelMission;
     }
 
     void Update()

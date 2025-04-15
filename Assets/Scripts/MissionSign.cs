@@ -4,4 +4,5 @@ public enum MissionSign
     NoMission,
     StartMission,
     EndMission,
+    CancelMission
 }
