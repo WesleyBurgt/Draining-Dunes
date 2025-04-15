@@ -8,6 +8,7 @@ public class DeliverySystem : MonoBehaviour
     private DeliveryMissionHandler deliveryMissionHandler;
     public CarControl carControl;
 
+    public DeliveryMission? currentMission { get { return deliveryMissionHandler.currentMission; } }
     public DeliveryPort? CurrentDestinationDeliveryPort { get { return deliveryMissionHandler.CurrentDestinationDeliveryPort; } }
 
 
@@ -15,6 +16,8 @@ public class DeliverySystem : MonoBehaviour
     public int baseMissionReward = 100;
     public float missionRewardDistanceMultiplier = 1f;
     public float missionRewardSpeedMultiplier = 1f;
+
+    [HideInInspector] public DeliveryPort? WantsToStartMissionDeliveryPort;
 
     void Start()
     {
@@ -39,21 +42,20 @@ public class DeliverySystem : MonoBehaviour
             {
                 case MissionSign.StartMission:
                     {
-                        AssignMission(deliveryPort);
-                        RepairAndRefuelCar();
+                        WantsToStartMissionDeliveryPort = deliveryPort;
+                        deliveryPort.missionSign = MissionSign.NoMission;
                         return;
                     }
                 case MissionSign.EndMission:
                     {
                         CompleteMission();
-                        RepairAndRefuelCar();
                         return;
                     }
             }
         }
     }
 
-    void AssignMission(DeliveryPort deliveryPort)
+    public void AssignMission(DeliveryPort deliveryPort)
     {
         deliveryMissionHandler.AssignMission(deliveryPort);
     }
@@ -67,14 +69,17 @@ public class DeliverySystem : MonoBehaviour
         }
     }
 
-    void RepairAndRefuelCar()
+    public void RepairCar()
     {
         if (carControl.money >= Mathf.RoundToInt(carControl.damagePercentage))
         {
             carControl.money -= Mathf.RoundToInt(carControl.damagePercentage);
             carControl.ResetDamage();
         }
+    }
 
+    public void RefuelCar()
+    {
         if (carControl.money >= Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel))
         {
             carControl.money -= Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel);
