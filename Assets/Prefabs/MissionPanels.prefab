@@ -52,6 +52,7 @@ MonoBehaviour:
   _preMissionRepairToggle: {fileID: 8620182752956911489}
   _preMissionAcceptButton: {fileID: 1852227053509773318}
   _preMissionCancelButton: {fileID: 5671221113400395338}
+  _midMissionPanel: {fileID: 1560817842373926660}
 --- !u!1001 &2906152778407944112
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -149,6 +150,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea10e6cc9cd546544af55b6c82ac6611, type: 3}
+--- !u!1 &1560817842373926660 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4466894644286783668, guid: ea10e6cc9cd546544af55b6c82ac6611, type: 3}
+  m_PrefabInstance: {fileID: 2906152778407944112}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5235983729377394815 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6988823526975659983, guid: ea10e6cc9cd546544af55b6c82ac6611, type: 3}
