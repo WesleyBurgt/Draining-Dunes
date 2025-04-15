@@ -21,6 +21,11 @@ public class DeliveryMissionHandler
         baseMissionReward = _baseMissionReward;
         missionRewardDistanceMultiplier = _missionRewardDistanceMultiplier;
         missionRewardSpeedMultiplier = _missionRewardSpeedMultiplier;
+
+        foreach (var deliveryPort in deliveryPorts)
+        {
+            deliveryPort.nextMission = GetNewMission(deliveryPort);
+        }
     }
 
     DeliveryPort? GetCurrentDestinationDeliveryPort()
@@ -28,7 +33,7 @@ public class DeliveryMissionHandler
         return currentMission?.endDeliveryPort;
     }
 
-    DeliveryMission GetMission(DeliveryPort startDeliveryPort)
+    public DeliveryMission GetNewMission(DeliveryPort startDeliveryPort)
     {
         float startTime = Time.time;
         DeliveryPort destinationDeliveryPort = GetRandomDeliveryPortExluding(startDeliveryPort);
@@ -44,21 +49,36 @@ public class DeliveryMissionHandler
         return deliveryPort;
     }
 
-    public void AssignMission(DeliveryPort deliveryPort)
+    public void AssignMission(DeliveryPort startDeliveryPort)
     {
         if (currentMission == null)
         {
-            currentMission = GetMission(deliveryPort);
-        }
+            DeliveryMission mission = startDeliveryPort.nextMission;
+            DeliveryPort endDeliveryPort = startDeliveryPort.nextMission.endDeliveryPort;
 
-        deliveryPort.missionSign = MissionSign.NoMission;
+            currentMission = mission;
+
+            startDeliveryPort.assignedMission = mission;
+            endDeliveryPort.assignedMission = mission;
+            startDeliveryPort.missionSign = MissionSign.MissionInProgress;
+            endDeliveryPort.missionSign = MissionSign.MissionInProgress;
+
+            startDeliveryPort.nextMission = GetNewMission(startDeliveryPort);
+        }
     }
 
     public void CompleteMission()
     {
         if (currentMission != null)
         {
-            currentMission.RemoveFromDeliveryPorts();
+            DeliveryPort startDeliveryPort = currentMission.startDeliveryPort;
+            DeliveryPort endDeliveryPort = currentMission.endDeliveryPort;
+
+            startDeliveryPort.assignedMission = null;
+            endDeliveryPort.assignedMission = null;
+            startDeliveryPort.missionSign = MissionSign.NoMission;
+            endDeliveryPort.missionSign = MissionSign.NoMission;
+
             currentMission = null;
         }
     }

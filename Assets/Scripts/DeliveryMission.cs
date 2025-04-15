@@ -18,7 +18,6 @@ public class DeliveryMission
         baseReward = _baseReward;
         rewardDistanceMultiplier = _rewardDistanceMultiplier;
         rewardSpeedMultiplier = _rewardSpeedMultiplier;
-        AddToDeliveryPorts();
     }
 
     public int Reward(float endTime)
@@ -35,22 +34,6 @@ public class DeliveryMission
         int reward = Mathf.RoundToInt(baseReward + distanceBonus + speedBonus);
 
         return reward;
-    }
-
-    void AddToDeliveryPorts()
-    {
-        startDeliveryPort.assignedMission = this;
-        endDeliveryPort.assignedMission = this;
-        startDeliveryPort.missionSign = MissionSign.MissionInProgress;
-        endDeliveryPort.missionSign = MissionSign.MissionInProgress;
-    }
-
-    public void RemoveFromDeliveryPorts()
-    {
-        startDeliveryPort.assignedMission = null;
-        endDeliveryPort.assignedMission = null;
-        startDeliveryPort.missionSign = MissionSign.NoMission;
-        endDeliveryPort.missionSign = MissionSign.NoMission;
     }
 
     float CalculateDeliveryDistance()
