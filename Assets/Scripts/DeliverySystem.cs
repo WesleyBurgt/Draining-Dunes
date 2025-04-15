@@ -27,7 +27,11 @@ public class DeliverySystem : MonoBehaviour
 
     void Update()
     {
-        HandleMissionSigns();
+        float MaxCarSpeedForHandlingMissions = 1f;
+        if (carControl.CurrentSpeed < MaxCarSpeedForHandlingMissions)
+        {
+            HandleMissionSigns();
+        }
     }
 
     void HandleMissionSigns()
