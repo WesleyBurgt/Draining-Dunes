@@ -4,7 +4,7 @@ public class DeliveryPort : MonoBehaviour
 {
     public DeliveryMission nextMission;
     public DeliveryMission assignedMission;
-    public MissionSign missionSign = MissionSign.NoMission;
+    [HideInInspector] public MissionSign missionSign = MissionSign.NoMission;
 
     void Start()
     {
