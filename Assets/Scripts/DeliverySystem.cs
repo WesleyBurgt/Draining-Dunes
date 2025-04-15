@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 
 public class DeliverySystem : MonoBehaviour
@@ -6,23 +5,21 @@ public class DeliverySystem : MonoBehaviour
 #nullable enable
 
     private DeliveryPort[] deliveryPorts;
+    private DeliveryMissionHandler deliveryMissionHandler;
     public CarControl carControl;
-    public DeliveryMission? currentMission;
-    public DeliveryPort? CurrentDestinationDeliveryPort { get { return GetCurrentDestinationDeliveryPort(); } }
+
+    public DeliveryPort? CurrentDestinationDeliveryPort { get { return deliveryMissionHandler.CurrentDestinationDeliveryPort; } }
+
+
+    [Header("Mission reward")]
     public int baseMissionReward = 100;
     public float missionRewardDistanceMultiplier = 1f;
     public float missionRewardSpeedMultiplier = 1f;
 
-    System.Random random = new System.Random();
-
-    DeliveryPort? GetCurrentDestinationDeliveryPort()
-    {
-        return currentMission?.endDeliveryPort;
-    }
-
     void Start()
     {
         deliveryPorts = GetComponentsInChildren<DeliveryPort>();
+        deliveryMissionHandler = new DeliveryMissionHandler(deliveryPorts, baseMissionReward, missionRewardDistanceMultiplier, missionRewardSpeedMultiplier);
     }
 
     void Update()
@@ -58,23 +55,15 @@ public class DeliverySystem : MonoBehaviour
 
     void AssignMission(DeliveryPort deliveryPort)
     {
-        if (currentMission == null)
-        {
-            DeliveryPort destinationDeliveryPort = GetRandomDeliveryPortExluding(deliveryPort);
-            DeliveryMission mission = new DeliveryMission(deliveryPort, destinationDeliveryPort, Time.time, baseMissionReward, missionRewardDistanceMultiplier, missionRewardSpeedMultiplier);
-            currentMission = mission;
-        }
-
-        deliveryPort.missionSign = MissionSign.NoMission;
+        deliveryMissionHandler.AssignMission(deliveryPort);
     }
 
     void CompleteMission()
     {
-        if (currentMission != null)
+        if (deliveryMissionHandler.currentMission != null)
         {
-            currentMission.RemoveFromDeliveryPorts();
-            carControl.money += currentMission.Reward(Time.time);
-            currentMission = null;
+            carControl.money += deliveryMissionHandler.currentMission.Reward(Time.time);
+            deliveryMissionHandler.CompleteMission();
         }
     }
 
@@ -91,13 +80,5 @@ public class DeliverySystem : MonoBehaviour
             carControl.money -= Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel);
             carControl.ResetFuel();
         }
-    }
-
-    DeliveryPort GetRandomDeliveryPortExluding(DeliveryPort exludedDeliveryPort)
-    {
-        DeliveryPort[] filteredDeliveryPorts = deliveryPorts.Where(o => o != exludedDeliveryPort).ToArray();
-        int index = random.Next(0, filteredDeliveryPorts.Length);
-        DeliveryPort deliveryPort = filteredDeliveryPorts[index];
-        return deliveryPort;
     }
 }
