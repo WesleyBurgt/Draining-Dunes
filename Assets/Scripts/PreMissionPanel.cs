@@ -8,7 +8,9 @@ public class PreMissionPanel : MonoBehaviour
     [SerializeField] private TMP_Text _missionText;
     [SerializeField] private TMP_Text _rewardText;
     [SerializeField] private Toggle _preMissionRefuelToggle;
+    [SerializeField] private TMP_Text _preMissionRefuelCostText;
     [SerializeField] private Toggle _preMissionRepairToggle;
+    [SerializeField] private TMP_Text _preMissionRepairCostText;
     [SerializeField] private Button _preMissionAcceptButton;
     [SerializeField] private Button _preMissionCancelButton;
 
@@ -29,6 +31,26 @@ public class PreMissionPanel : MonoBehaviour
             int baseMissionReward = _deliverySystem.WantsToStartMission.GetBaseReward();
             float dollarsPerKMPH = _deliverySystem.WantsToStartMission.GetSpeedBonusPerKMPH();
             _rewardText.text = $"Base Reward: ${baseMissionReward}\nSpeed Bonus: +${dollarsPerKMPH:F2} per kmph of average speed";
+
+            if (_preMissionRefuelToggle.isOn)
+            {
+                int refuelCost = _deliverySystem.GetRefuelCarCost();
+                _preMissionRefuelCostText.text = $"-${refuelCost}";
+            }
+            else
+            {
+                _preMissionRefuelCostText.text = string.Empty;
+            }
+
+            if (_preMissionRepairToggle.isOn)
+            {
+                int repairCost = _deliverySystem.GetRepairCarCost();
+                _preMissionRepairCostText.text = $"-${repairCost}";
+            }
+            else
+            {
+                _preMissionRepairCostText.text = string.Empty;
+            }
         }
     }
 
