@@ -18,6 +18,7 @@ public class DeliverySystem : MonoBehaviour
     public float missionRewardSpeedMultiplier = 1f;
 
     [HideInInspector] public DeliveryPort? WantsToStartMissionDeliveryPort;
+    [HideInInspector] public bool EndMissionSignal = false;
 
     void Start()
     {
@@ -74,6 +75,7 @@ public class DeliverySystem : MonoBehaviour
     {
         if (deliveryMissionHandler.currentMission != null)
         {
+            EndMissionSignal = true;
             carControl.money += deliveryMissionHandler.currentMission.Reward(Time.time);
             deliveryMissionHandler.CompleteMission();
         }
