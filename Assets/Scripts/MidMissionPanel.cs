@@ -1,16 +1,21 @@
 using UnityEngine;
+using TMPro;
 
 public class MidMissionPanel : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private DeliverySystem _deliverySystem;
+    [SerializeField] private TMP_Text _deliveryPortNameText;
+
     void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        if (_deliverySystem.CurrentDestinationDeliveryPort != null)
+        {
+            _deliveryPortNameText.text = _deliverySystem.CurrentDestinationDeliveryPort.name;
+        }
     }
 }
