@@ -34,6 +34,9 @@ public class EndMissionPanel : MonoBehaviour
         {
             _deliverySystem.RepairCar();
         }
+
+        DeliveryPort startdeliveryPort = _deliverySystem.EndedMission.startDeliveryPort;
+        _deliverySystem.RequestAnotherMission(startdeliveryPort);
         _deliverySystem.EndedMission = null;
     }
 

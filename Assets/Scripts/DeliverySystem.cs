@@ -67,6 +67,11 @@ public class DeliverySystem : MonoBehaviour
         }
     }
 
+    public void RequestAnotherMission(DeliveryPort deliveryPort)
+    {
+        WantsToStartMission = deliveryPort.nextMission;
+    }
+
     public void AssignMission(DeliveryMission deliveryMission)
     {
         deliveryMissionHandler.AssignMission(deliveryMission);
