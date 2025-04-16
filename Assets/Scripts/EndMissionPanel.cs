@@ -39,12 +39,16 @@ public class EndMissionPanel : MonoBehaviour
 
     void ShowMissionRewards(DeliveryMission endedMission)
     {
-        _endMissionBaseRewardText.text = endedMission.GetBaseReward().ToString();
-        _endMissionSpeedBonusText.text = endedMission.GetSpeedBonus().ToString();
+        int totalReward = endedMission.GetReward();
+
+        _endMissionBaseRewardText.text = $"${endedMission.GetBaseReward()}";
+        _endMissionSpeedBonusText.text = $"${endedMission.GetSpeedBonus()}";
 
         if (_endMissionRefuelToggle.isOn)
         {
-            _endMissionRefuelCostText.text = _deliverySystem.GetRefuelCarCost().ToString();
+            int refuelCost = _deliverySystem.GetRefuelCarCost();
+            _endMissionRefuelCostText.text = $"-${refuelCost}";
+            totalReward -= refuelCost;
         }
         else
         {
@@ -53,11 +57,15 @@ public class EndMissionPanel : MonoBehaviour
 
         if (_endMissionRepairToggle.isOn)
         {
-            _endMissionRepairCostText.text = _deliverySystem.GetRepairCarCost().ToString();
+            int repairCost = _deliverySystem.GetRepairCarCost();
+            _endMissionRepairCostText.text = $"-${repairCost}";
+            totalReward -= repairCost;
         }
         else
         {
             _endMissionRepairCostText.text = string.Empty;
         }
+
+        _endMissionTotalRewardText.text = $"${totalReward}";
     }
 }
