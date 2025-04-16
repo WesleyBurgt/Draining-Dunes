@@ -953,12 +953,12 @@ MonoBehaviour:
   _deliverySystem: {fileID: 0}
   _missionText: {fileID: 4482578783723721054}
   _rewardText: {fileID: 2450347761953747068}
-  _preMissionRefuelToggle: {fileID: 1357296313508745062}
-  _preMissionRefuelCostText: {fileID: 3651303655605687712}
-  _preMissionRepairToggle: {fileID: 1114954548650555102}
-  _preMissionRepairCostText: {fileID: 443917553535870011}
-  _preMissionAcceptButton: {fileID: 7020119488119320921}
-  _preMissionCancelButton: {fileID: 3921560253163552533}
+  _refuelToggle: {fileID: 1357296313508745062}
+  _refuelCostText: {fileID: 3651303655605687712}
+  _repairToggle: {fileID: 1114954548650555102}
+  _repairCostText: {fileID: 443917553535870011}
+  _acceptButton: {fileID: 7020119488119320921}
+  _cancelButton: {fileID: 3921560253163552533}
 --- !u!1 &5063488305778747093
 GameObject:
   m_ObjectHideFlags: 0

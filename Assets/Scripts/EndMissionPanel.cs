@@ -5,18 +5,18 @@ using TMPro;
 public class EndMissionPanel : MonoBehaviour
 {
     [SerializeField] private DeliverySystem _deliverySystem;
-    [SerializeField] private TMP_Text _endMissionBaseRewardText;
-    [SerializeField] private TMP_Text _endMissionSpeedBonusText;
-    [SerializeField] private Toggle _endMissionRefuelToggle;
-    [SerializeField] private TMP_Text _endMissionRefuelCostText;
-    [SerializeField] private Toggle _endMissionRepairToggle;
-    [SerializeField] private TMP_Text _endMissionRepairCostText;
-    [SerializeField] private TMP_Text _endMissionTotalRewardText;
-    [SerializeField] private Button _endMissionOkButton;
+    [SerializeField] private TMP_Text _baseRewardText;
+    [SerializeField] private TMP_Text _speedBonusText;
+    [SerializeField] private Toggle _refuelToggle;
+    [SerializeField] private TMP_Text _refuelCostText;
+    [SerializeField] private Toggle _repairToggle;
+    [SerializeField] private TMP_Text _repairCostText;
+    [SerializeField] private TMP_Text _totalRewardText;
+    [SerializeField] private Button _okButton;
 
     void Start()
     {
-        _endMissionOkButton.onClick.AddListener(EndMissionOk);
+        _okButton.onClick.AddListener(EndMissionOk);
     }
 
     void LateUpdate()
@@ -26,11 +26,11 @@ public class EndMissionPanel : MonoBehaviour
 
     void EndMissionOk()
     {
-        if (_endMissionRefuelToggle.isOn)
+        if (_refuelToggle.isOn)
         {
             _deliverySystem.RefuelCar();
         }
-        if (_endMissionRepairToggle.isOn)
+        if (_repairToggle.isOn)
         {
             _deliverySystem.RepairCar();
         }
@@ -41,31 +41,31 @@ public class EndMissionPanel : MonoBehaviour
     {
         int totalReward = endedMission.GetReward();
 
-        _endMissionBaseRewardText.text = $"${endedMission.GetBaseReward()}";
-        _endMissionSpeedBonusText.text = $"${endedMission.GetSpeedBonus()}";
+        _baseRewardText.text = $"${endedMission.GetBaseReward()}";
+        _speedBonusText.text = $"${endedMission.GetSpeedBonus()}";
 
-        if (_endMissionRefuelToggle.isOn)
+        if (_refuelToggle.isOn)
         {
             int refuelCost = _deliverySystem.GetRefuelCarCost();
-            _endMissionRefuelCostText.text = $"-${refuelCost}";
+            _refuelCostText.text = $"-${refuelCost}";
             totalReward -= refuelCost;
         }
         else
         {
-            _endMissionRefuelCostText.text = string.Empty;
+            _refuelCostText.text = string.Empty;
         }
 
-        if (_endMissionRepairToggle.isOn)
+        if (_repairToggle.isOn)
         {
             int repairCost = _deliverySystem.GetRepairCarCost();
-            _endMissionRepairCostText.text = $"-${repairCost}";
+            _repairCostText.text = $"-${repairCost}";
             totalReward -= repairCost;
         }
         else
         {
-            _endMissionRepairCostText.text = string.Empty;
+            _repairCostText.text = string.Empty;
         }
 
-        _endMissionTotalRewardText.text = $"${totalReward}";
+        _totalRewardText.text = $"${totalReward}";
     }
 }
