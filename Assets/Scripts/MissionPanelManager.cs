@@ -15,7 +15,7 @@ public class MissionPanelManager : MonoBehaviour
 
     void LateUpdate()
     {
-        _preMissionPanel.gameObject.SetActive(_deliverySystem.WantsToStartMissionDeliveryPort != null);
+        _preMissionPanel.gameObject.SetActive(_deliverySystem.WantsToStartMission != null);
         _midMissionPanel.gameObject.SetActive(_deliverySystem.currentMission != null);
         _endMissionPanel.gameObject.SetActive(_deliverySystem.EndedMission != null);
     }

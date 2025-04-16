@@ -49,21 +49,18 @@ public class DeliveryMissionHandler
         return deliveryPort;
     }
 
-    public void AssignMission(DeliveryPort startDeliveryPort)
+    public void AssignMission(DeliveryMission deliveryMission)
     {
         if (currentMission == null)
         {
-            DeliveryMission mission = startDeliveryPort.nextMission;
-            DeliveryPort endDeliveryPort = startDeliveryPort.nextMission.endDeliveryPort;
+            currentMission = deliveryMission;
 
-            currentMission = mission;
+            deliveryMission.startDeliveryPort.assignedMission = deliveryMission;
+            deliveryMission.endDeliveryPort.assignedMission = deliveryMission;
+            deliveryMission.startDeliveryPort.missionSign = MissionSign.MissionInProgress;
+            deliveryMission.endDeliveryPort.missionSign = MissionSign.MissionInProgress;
 
-            startDeliveryPort.assignedMission = mission;
-            endDeliveryPort.assignedMission = mission;
-            startDeliveryPort.missionSign = MissionSign.MissionInProgress;
-            endDeliveryPort.missionSign = MissionSign.MissionInProgress;
-
-            startDeliveryPort.nextMission = GetNewMission(startDeliveryPort);
+            deliveryMission.startDeliveryPort.nextMission = GetNewMission(deliveryMission.startDeliveryPort);
         }
     }
 

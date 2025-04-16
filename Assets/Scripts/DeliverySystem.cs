@@ -17,7 +17,7 @@ public class DeliverySystem : MonoBehaviour
     public float missionRewardDistanceMultiplier = 1f;
     public float missionRewardSpeedMultiplier = 1f;
 
-    [HideInInspector] public DeliveryPort? WantsToStartMissionDeliveryPort;
+    [HideInInspector] public DeliveryMission? WantsToStartMission;
     [HideInInspector] public DeliveryMission? EndedMission;
 
     void Start()
@@ -43,7 +43,7 @@ public class DeliverySystem : MonoBehaviour
                     {
                         if (mayHandleMissions)
                         {
-                            WantsToStartMissionDeliveryPort = deliveryPort;
+                            WantsToStartMission = deliveryPort.nextMission;
                             deliveryPort.missionSign = MissionSign.NoMission;
                         }
                         return;
@@ -58,7 +58,7 @@ public class DeliverySystem : MonoBehaviour
                     }
                 case MissionSign.CancelMission:
                     {
-                        WantsToStartMissionDeliveryPort = null;
+                        WantsToStartMission = null;
                         deliveryPort.missionSign = MissionSign.NoMission;
                         return;
                     }
@@ -66,9 +66,9 @@ public class DeliverySystem : MonoBehaviour
         }
     }
 
-    public void AssignMission(DeliveryPort deliveryPort)
+    public void AssignMission(DeliveryMission deliveryMission)
     {
-        deliveryMissionHandler.AssignMission(deliveryPort);
+        deliveryMissionHandler.AssignMission(deliveryMission);
     }
 
     void CompleteMission()
