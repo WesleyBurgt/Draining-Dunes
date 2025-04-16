@@ -10,7 +10,6 @@ public class DeliverySystem : MonoBehaviour
 
     public DeliveryMission? currentMission { get { return deliveryMissionHandler.currentMission; } }
     public DeliveryPort? CurrentDestinationDeliveryPort { get { return deliveryMissionHandler.CurrentDestinationDeliveryPort; } }
-    public string StopCarWarning = string.Empty;
 
 
     [Header("Mission reward")]
@@ -20,6 +19,7 @@ public class DeliverySystem : MonoBehaviour
 
     [HideInInspector] public DeliveryMission? WantsToStartMission;
     [HideInInspector] public DeliveryMission? EndedMission;
+    [HideInInspector] public string StopCarWarning = string.Empty;
 
     void Start()
     {
@@ -47,7 +47,7 @@ public class DeliverySystem : MonoBehaviour
                             deliveryPort.missionSign = MissionSign.NoMission;
                             return;
                         }
-                        
+
                         if (mayHandleMissions)
                         {
                             WantsToStartMission = deliveryPort.nextMission;
