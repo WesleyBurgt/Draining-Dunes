@@ -1668,6 +1668,7 @@ GameObject:
   - component: {fileID: 1721679070658515163}
   - component: {fileID: 2443672269505810990}
   - component: {fileID: 4646616226879504204}
+  - component: {fileID: 1206359076644309345}
   m_Layer: 5
   m_Name: EndMissionPanel
   m_TagString: Untagged
@@ -1744,6 +1745,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1206359076644309345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6568674571261025442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0cdb3558f8111a48b81e3c7fc84a90a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _deliverySystem: {fileID: 0}
+  _endMissionBaseRewardText: {fileID: 4719328934432858409}
+  _endMissionSpeedBonusText: {fileID: 8771513089934426013}
+  _endMissionRefuelToggle: {fileID: 7656585537395164236}
+  _endMissionRefuelCostText: {fileID: 8464065075585370204}
+  _endMissionRepairToggle: {fileID: 9070509519750124744}
+  _endMissionRepairCostText: {fileID: 5317070492980334110}
+  _endMissionTotalRewardText: {fileID: 263231802656411449}
+  _endMissionOkButton: {fileID: 5430455816159873070}
 --- !u!1 &6688286108803545457
 GameObject:
   m_ObjectHideFlags: 0
