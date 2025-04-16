@@ -42,6 +42,12 @@ public class DeliverySystem : MonoBehaviour
             {
                 case MissionSign.StartMission:
                     {
+                        if (currentMission != null)
+                        {
+                            deliveryPort.missionSign = MissionSign.NoMission;
+                            return;
+                        }
+                        
                         if (mayHandleMissions)
                         {
                             WantsToStartMission = deliveryPort.nextMission;
