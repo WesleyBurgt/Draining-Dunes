@@ -59,6 +59,7 @@ public class DeliverySystem : MonoBehaviour
                 case MissionSign.CancelMission:
                     {
                         WantsToStartMission = null;
+                        EndedMission = null;
                         deliveryPort.missionSign = MissionSign.NoMission;
                         return;
                     }
