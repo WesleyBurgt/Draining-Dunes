@@ -10,6 +10,7 @@ public class DeliverySystem : MonoBehaviour
 
     public DeliveryMission? currentMission { get { return deliveryMissionHandler.currentMission; } }
     public DeliveryPort? CurrentDestinationDeliveryPort { get { return deliveryMissionHandler.CurrentDestinationDeliveryPort; } }
+    public string StopCarWarning = string.Empty;
 
 
     [Header("Mission reward")]
@@ -45,6 +46,11 @@ public class DeliverySystem : MonoBehaviour
                         {
                             WantsToStartMission = deliveryPort.nextMission;
                             deliveryPort.missionSign = MissionSign.NoMission;
+                            StopCarWarning = string.Empty;
+                        }
+                        else
+                        {
+                            StopCarWarning = "Stop to take on missions";
                         }
                         return;
                     }
@@ -53,6 +59,11 @@ public class DeliverySystem : MonoBehaviour
                         if (mayHandleMissions)
                         {
                             CompleteMission();
+                            StopCarWarning = string.Empty;
+                        }
+                        else
+                        {
+                            StopCarWarning = "Stop to complete mission";
                         }
                         return;
                     }
@@ -61,6 +72,7 @@ public class DeliverySystem : MonoBehaviour
                         WantsToStartMission = null;
                         EndedMission = null;
                         deliveryPort.missionSign = MissionSign.NoMission;
+                        StopCarWarning = string.Empty;
                         return;
                     }
             }
