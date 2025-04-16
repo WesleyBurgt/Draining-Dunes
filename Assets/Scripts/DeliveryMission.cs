@@ -5,17 +5,16 @@ public class DeliveryMission
     public DeliveryPort startDeliveryPort { get; private set; }
     public DeliveryPort endDeliveryPort { get; private set; }
     public float deliveryDistance { get { return CalculateDeliveryDistance(); } }
-    public float startTime { get; private set; }
+    public float startTime;
     public float endTime;
     public int baseReward { get; private set; }
     public float rewardDistanceMultiplier;
     public float rewardSpeedMultiplier;
 
-    public DeliveryMission(DeliveryPort _startDeliveryPort, DeliveryPort _endDeliveryPort, float _startTime, int _baseReward, float _rewardDistanceMultiplier, float _rewardSpeedMultiplier)
+    public DeliveryMission(DeliveryPort _startDeliveryPort, DeliveryPort _endDeliveryPort, int _baseReward, float _rewardDistanceMultiplier, float _rewardSpeedMultiplier)
     {
         startDeliveryPort = _startDeliveryPort;
         endDeliveryPort = _endDeliveryPort;
-        startTime = _startTime;
         baseReward = _baseReward;
         rewardDistanceMultiplier = _rewardDistanceMultiplier;
         rewardSpeedMultiplier = _rewardSpeedMultiplier;
