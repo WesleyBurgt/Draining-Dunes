@@ -55,6 +55,13 @@ MonoBehaviour:
   _preMissionCancelButton: {fileID: 5671221113400395338}
   _midMissionPanel: {fileID: 1560817842373926660}
   _endMissionPanel: {fileID: 5428997780106799812}
+  _endMissionBaseRewardText: {fileID: 0}
+  _endMissionSpeedBonusText: {fileID: 0}
+  _endMissionRefuelToggle: {fileID: 0}
+  _endMissionRefuelCostText: {fileID: 0}
+  _endMissionRepairToggle: {fileID: 0}
+  _endMissionRepairCostText: {fileID: 0}
+  _endMissionTotalRewardText: {fileID: 0}
   _endMissionOkButton: {fileID: 6567348614076055112}
 --- !u!1001 &1188723870555829862
 PrefabInstance:

@@ -6,6 +6,7 @@ public class DeliveryMission
     public DeliveryPort endDeliveryPort { get; private set; }
     public float deliveryDistance { get { return CalculateDeliveryDistance(); } }
     public float startTime { get; private set; }
+    public float endTime;
     public int baseReward { get; private set; }
     public float rewardDistanceMultiplier;
     public float rewardSpeedMultiplier;
@@ -20,20 +21,35 @@ public class DeliveryMission
         rewardSpeedMultiplier = _rewardSpeedMultiplier;
     }
 
-    public int Reward(float endTime)
+    public int GetReward()
     {
-        float deliveryTime = endTime - startTime;
-
-        if (deliveryTime <= 0.01f)
-        {
-            deliveryTime = 0.01f;
-        }
-
-        float distanceBonus = deliveryDistance * rewardDistanceMultiplier;
-        float speedBonus = (deliveryDistance / deliveryTime) * rewardSpeedMultiplier;
-        int reward = Mathf.RoundToInt(baseReward + distanceBonus + speedBonus);
-
+        int reward = GetBaseReward() + GetSpeedBonus();
         return reward;
+    }
+
+    public int GetBaseReward()
+    {
+        float distanceBonus = deliveryDistance * rewardDistanceMultiplier;
+        int reward = Mathf.RoundToInt(baseReward + distanceBonus);
+        return reward;
+    }
+
+    public int GetSpeedBonus()
+    {
+        if (endTime != 0f)
+        {
+            float deliveryTime = endTime - startTime;
+
+            if (deliveryTime <= 0.01f)
+            {
+                deliveryTime = 0.01f;
+            }
+
+            float speedBonus = (deliveryDistance / deliveryTime) * rewardSpeedMultiplier;
+            int roundedSpeedBonus = Mathf.RoundToInt(speedBonus);
+            return roundedSpeedBonus;
+        }
+        return 0;
     }
 
     float CalculateDeliveryDistance()

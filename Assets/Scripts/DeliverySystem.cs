@@ -18,7 +18,7 @@ public class DeliverySystem : MonoBehaviour
     public float missionRewardSpeedMultiplier = 1f;
 
     [HideInInspector] public DeliveryPort? WantsToStartMissionDeliveryPort;
-    [HideInInspector] public bool EndMissionSignal = false;
+    [HideInInspector] public DeliveryMission? EndedMission;
 
     void Start()
     {
@@ -75,26 +75,39 @@ public class DeliverySystem : MonoBehaviour
     {
         if (deliveryMissionHandler.currentMission != null)
         {
-            EndMissionSignal = true;
-            carControl.money += deliveryMissionHandler.currentMission.Reward(Time.time);
+            deliveryMissionHandler.currentMission.endTime = Time.time;
+            EndedMission = deliveryMissionHandler.currentMission;
+            carControl.money += deliveryMissionHandler.currentMission.GetReward();
             deliveryMissionHandler.CompleteMission();
         }
     }
 
+    public int GetRepairCarCost()
+    {
+        int cost = Mathf.RoundToInt(carControl.damagePercentage);
+        return cost;
+    }
+
+    public int GetRefuelCarCost()
+    {
+        int cost = Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel);
+        return cost;
+    }
+
     public void RepairCar()
     {
-        if (carControl.money >= Mathf.RoundToInt(carControl.damagePercentage))
+        if (carControl.money >= GetRepairCarCost())
         {
-            carControl.money -= Mathf.RoundToInt(carControl.damagePercentage);
+            carControl.money -= GetRepairCarCost();
             carControl.ResetDamage();
         }
     }
 
     public void RefuelCar()
     {
-        if (carControl.money >= Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel))
+        if (carControl.money >= GetRefuelCarCost())
         {
-            carControl.money -= Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel);
+            carControl.money -= GetRefuelCarCost();
             carControl.ResetFuel();
         }
     }
