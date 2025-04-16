@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PreMissionPanel : MonoBehaviour
 {
     [SerializeField] private DeliverySystem _deliverySystem;
+    [SerializeField] private TMP_Text _missionText;
+    [SerializeField] private TMP_Text _rewardText;
     [SerializeField] private Toggle _preMissionRefuelToggle;
     [SerializeField] private Toggle _preMissionRepairToggle;
     [SerializeField] private Button _preMissionAcceptButton;
@@ -17,12 +20,21 @@ public class PreMissionPanel : MonoBehaviour
 
     void LateUpdate()
     {
+        if (_deliverySystem.WantsToStartMission != null)
+        {
+            string destinationName = _deliverySystem.WantsToStartMission.endDeliveryPort.name;
+            string goods = "stone";
+            _missionText.text = $"Deliver {goods} to {destinationName}";
 
+            int baseMissionReward = _deliverySystem.WantsToStartMission.GetBaseReward();
+            float dollarsPerKMPH = _deliverySystem.WantsToStartMission.GetSpeedBonusPerKMPH();
+            _rewardText.text = $"Base Reward: ${baseMissionReward}\nSpeed Bonus: +${dollarsPerKMPH:F2} per kmph of average speed";
+        }
     }
 
     void AcceptMission()
     {
-        _deliverySystem.AssignMission(_deliverySystem.WantsToStartMissionDeliveryPort);
+        _deliverySystem.AssignMission(_deliverySystem.WantsToStartMission);
         if (_preMissionRefuelToggle.isOn)
         {
             _deliverySystem.RefuelCar();
@@ -31,11 +43,11 @@ public class PreMissionPanel : MonoBehaviour
         {
             _deliverySystem.RepairCar();
         }
-        _deliverySystem.WantsToStartMissionDeliveryPort = null;
+        _deliverySystem.WantsToStartMission = null;
     }
 
     void CancelMission()
     {
-        _deliverySystem.WantsToStartMissionDeliveryPort = null;
+        _deliverySystem.WantsToStartMission = null;
     }
 }

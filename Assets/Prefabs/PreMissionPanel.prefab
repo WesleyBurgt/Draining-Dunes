@@ -813,6 +813,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deliverySystem: {fileID: 0}
+  _missionText: {fileID: 4482578783723721054}
+  _rewardText: {fileID: 2450347761953747068}
   _preMissionRefuelToggle: {fileID: 1357296313508745062}
   _preMissionRepairToggle: {fileID: 1114954548650555102}
   _preMissionAcceptButton: {fileID: 7020119488119320921}

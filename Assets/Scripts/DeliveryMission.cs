@@ -52,6 +52,12 @@ public class DeliveryMission
         return 0;
     }
 
+    public float GetSpeedBonusPerKMPH()
+    {
+        float dollarsPerKMPH = rewardSpeedMultiplier / 3.6f;
+        return dollarsPerKMPH;
+    }
+
     float CalculateDeliveryDistance()
     {
         return Vector3.Distance(
