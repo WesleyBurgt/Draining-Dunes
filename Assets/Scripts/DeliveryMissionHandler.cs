@@ -35,7 +35,6 @@ public class DeliveryMissionHandler
 
     public DeliveryMission GetNewMission(DeliveryPort startDeliveryPort)
     {
-        float startTime = Time.time;
         DeliveryPort destinationDeliveryPort = GetRandomDeliveryPortExluding(startDeliveryPort);
         DeliveryMission mission = new DeliveryMission(startDeliveryPort, destinationDeliveryPort, baseMissionReward, missionRewardDistanceMultiplier, missionRewardSpeedMultiplier);
         return mission;
