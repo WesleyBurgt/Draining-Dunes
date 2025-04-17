@@ -39,6 +39,7 @@ public class RefuelAndRepairPanel : MonoBehaviour
         {
             _carRepairAndRefuel.RepairCar();
         }
+        gameObject.SetActive(false);
     }
 
     void ShowCosts()

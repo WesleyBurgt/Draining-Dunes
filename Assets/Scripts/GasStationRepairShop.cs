@@ -5,10 +5,13 @@ public class GasStationRepairShop : MonoBehaviour
     [SerializeField] private RefuelAndRepairPanel _refuelAndRepairPanel;
     [SerializeField] private GameObject _stopPanel;
 
+    private bool panelShown;
+
     void Start()
     {
         _refuelAndRepairPanel.gameObject.SetActive(false);
         _stopPanel.SetActive(false);
+        panelShown = false;
     }
 
     void OnTriggerStay(Collider other)
@@ -21,9 +24,19 @@ public class GasStationRepairShop : MonoBehaviour
 
         float maxCarSpeedForRefuelAndRepair = 1f;
         bool mayRefuelAndRepair = carControl.CurrentSpeed < maxCarSpeedForRefuelAndRepair;
-
-        _refuelAndRepairPanel.gameObject.SetActive(mayRefuelAndRepair);
-        _stopPanel.SetActive(!mayRefuelAndRepair);
+        if (!panelShown)
+        {
+            if (mayRefuelAndRepair)
+            {
+                _refuelAndRepairPanel.gameObject.SetActive(true);
+                _stopPanel.SetActive(false);
+                panelShown = true;
+            }
+            else
+            {
+                _stopPanel.SetActive(true);
+            }
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -35,5 +48,6 @@ public class GasStationRepairShop : MonoBehaviour
         }
         _refuelAndRepairPanel.gameObject.SetActive(false);
         _stopPanel.SetActive(false);
+        panelShown = false;
     }
 }
