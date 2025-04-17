@@ -6,6 +6,7 @@ public class CarControl : MonoBehaviour
     [Header("Car Properties")]
     public float motorTorque = 2000f;
     public float brakeTorque = 2000f;
+    public float handbrakeTorque = 5000f;
     public float maxSpeed = 20f;
     public float steeringRange = 30f;
     public float steeringRangeAtMaxSpeed = 10f;
@@ -19,7 +20,7 @@ public class CarControl : MonoBehaviour
     private WheelControl[] wheels;
     private Rigidbody rigidBody;
     private CarInputActions carControls;
-    
+
     private float oldRotation;
     private float collisionSpeed;
 
@@ -81,6 +82,8 @@ public class CarControl : MonoBehaviour
 
     void FixedUpdate()
     {
+        bool isUsingHandbrake = carControls.Car.Handbrake.ReadValue<float>() > 0.5f;
+
         Vector2 inputVector = carControls.Car.Movement.ReadValue<Vector2>();
         float throttleInput = inputVector.y;
         float steeringInput = inputVector.x;
@@ -97,8 +100,8 @@ public class CarControl : MonoBehaviour
         bool negligibleForwardSpeed = forwardSpeed > -0.1f && forwardSpeed < 0.1f;
         bool signsAreSame = Mathf.Sign(throttleInput) == Mathf.Sign(forwardSpeed);
         bool isAccelerating = (signsAreSame || negligibleForwardSpeed) && throttleInput != 0;
-                
-        ApplyDrive(isAccelerating, canAccelerate, throttleInput, currentMotorTorque);
+
+        ApplyDrive(isAccelerating, canAccelerate, isUsingHandbrake, throttleInput, currentMotorTorque);
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
 
         ApplySteering(steeringInput, currentSteerRange);
@@ -106,7 +109,7 @@ public class CarControl : MonoBehaviour
         AntiRoll();
     }
 
-    private void ApplyDrive(bool isAccelerating, bool canAccelerate, float throttleInput, float currentMotorTorque)
+    private void ApplyDrive(bool isAccelerating, bool canAccelerate, bool isUsingHandbrake, float throttleInput, float currentMotorTorque)
     {
         foreach (var wheel in wheels)
         {
@@ -125,7 +128,15 @@ public class CarControl : MonoBehaviour
             else
             {
                 wheel.WheelCollider.motorTorque = 0f;
-                wheel.WheelCollider.brakeTorque = Mathf.Abs(throttleInput) * brakeTorque;
+                if (!isUsingHandbrake)
+                {
+                    wheel.WheelCollider.brakeTorque = Mathf.Abs(throttleInput) * brakeTorque;
+                }
+            }
+
+            if (isUsingHandbrake)
+            {
+                wheel.WheelCollider.brakeTorque = handbrakeTorque;
             }
         }
     }
@@ -164,7 +175,7 @@ public class CarControl : MonoBehaviour
     {
         float travelL = 1.0f;
         float travelR = 1.0f;
-        foreach(WheelControl wheel in wheels)
+        foreach (WheelControl wheel in wheels)
         {
             WheelCollider wheelCollider = wheel.WheelCollider;
             bool grounded = wheelCollider.GetGroundHit(out WheelHit wheelHit);
@@ -185,7 +196,7 @@ public class CarControl : MonoBehaviour
 
         float antiRollForce = (travelL - travelR) * antiRollValue;
 
-        foreach(WheelControl wheel in wheels)
+        foreach (WheelControl wheel in wheels)
         {
             WheelCollider wheelCollider = wheel.WheelCollider;
             bool grounded = wheelCollider.GetGroundHit(out WheelHit wheelHit);
@@ -211,7 +222,7 @@ public class CarControl : MonoBehaviour
             float FuelUsage = baseFuelLoss + damageFuelLoss;
             if (isAccelerating)
             {
-                FuelUsage +=  torqueFuelLoss;
+                FuelUsage += torqueFuelLoss;
             }
             Fuel -= FuelUsage;
         }
