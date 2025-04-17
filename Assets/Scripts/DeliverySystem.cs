@@ -17,6 +17,7 @@ public class DeliverySystem : MonoBehaviour
     public float missionRewardDistanceMultiplier = 1f;
     public float missionRewardSpeedMultiplier = 1f;
 
+    [HideInInspector] public CarRepairAndRefuel CarRepairAndRefuel;
     [HideInInspector] public DeliveryMission? WantsToStartMission;
     [HideInInspector] public DeliveryMission? EndedMission;
     [HideInInspector] public string StopCarWarning = string.Empty;
@@ -24,6 +25,7 @@ public class DeliverySystem : MonoBehaviour
     void Start()
     {
         deliveryPorts = GetComponentsInChildren<DeliveryPort>();
+        CarRepairAndRefuel = GetComponent<CarRepairAndRefuel>();
         deliveryMissionHandler = new DeliveryMissionHandler(deliveryPorts, baseMissionReward, missionRewardDistanceMultiplier, missionRewardSpeedMultiplier);
     }
 
@@ -103,36 +105,6 @@ public class DeliverySystem : MonoBehaviour
             EndedMission = deliveryMissionHandler.currentMission;
             carControl.money += deliveryMissionHandler.currentMission.GetReward();
             deliveryMissionHandler.CompleteMission();
-        }
-    }
-
-    public int GetRepairCarCost()
-    {
-        int cost = Mathf.RoundToInt(carControl.damagePercentage);
-        return cost;
-    }
-
-    public int GetRefuelCarCost()
-    {
-        int cost = Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel);
-        return cost;
-    }
-
-    public void RepairCar()
-    {
-        if (carControl.money >= GetRepairCarCost())
-        {
-            carControl.money -= GetRepairCarCost();
-            carControl.ResetDamage();
-        }
-    }
-
-    public void RefuelCar()
-    {
-        if (carControl.money >= GetRefuelCarCost())
-        {
-            carControl.money -= GetRefuelCarCost();
-            carControl.ResetFuel();
         }
     }
 }

@@ -28,11 +28,11 @@ public class EndMissionPanel : MonoBehaviour
     {
         if (_refuelToggle.isOn)
         {
-            _deliverySystem.RefuelCar();
+            _deliverySystem.CarRepairAndRefuel.RefuelCar();
         }
         if (_repairToggle.isOn)
         {
-            _deliverySystem.RepairCar();
+            _deliverySystem.CarRepairAndRefuel.RepairCar();
         }
 
         DeliveryPort endDeliveryPort = _deliverySystem.EndedMission.endDeliveryPort;
@@ -49,7 +49,7 @@ public class EndMissionPanel : MonoBehaviour
 
         if (_refuelToggle.isOn)
         {
-            int refuelCost = _deliverySystem.GetRefuelCarCost();
+            int refuelCost = _deliverySystem.CarRepairAndRefuel.GetRefuelCarCost();
             _refuelCostText.text = $"-${refuelCost}";
             totalReward -= refuelCost;
         }
@@ -60,7 +60,7 @@ public class EndMissionPanel : MonoBehaviour
 
         if (_repairToggle.isOn)
         {
-            int repairCost = _deliverySystem.GetRepairCarCost();
+            int repairCost = _deliverySystem.CarRepairAndRefuel.GetRepairCarCost();
             _repairCostText.text = $"-${repairCost}";
             totalReward -= repairCost;
         }

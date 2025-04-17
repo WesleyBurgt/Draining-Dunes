@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4126004149179612769}
   - component: {fileID: 6563142118648745166}
+  - component: {fileID: 5228371260764925259}
   m_Layer: 0
   m_Name: AgencyWarehouses
   m_TagString: Untagged
@@ -53,7 +54,23 @@ MonoBehaviour:
   baseMissionReward: 50
   missionRewardDistanceMultiplier: 0.5
   missionRewardSpeedMultiplier: 2
+  CarRepairAndRefuel: {fileID: 0}
   StopCarWarning: 
+--- !u!114 &5228371260764925259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342496103632355439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd67978baa5423248836f8c7df133251, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carControl: {fileID: 0}
+  damageCostMultiplier: 1
+  fuelCostMultiplier: 1
 --- !u!1001 &101269678648338722
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -34,7 +34,7 @@ public class PreMissionPanel : MonoBehaviour
 
             if (_refuelToggle.isOn)
             {
-                int refuelCost = _deliverySystem.GetRefuelCarCost();
+                int refuelCost = _deliverySystem.CarRepairAndRefuel.GetRefuelCarCost();
                 _refuelCostText.text = $"-${refuelCost}";
             }
             else
@@ -44,7 +44,7 @@ public class PreMissionPanel : MonoBehaviour
 
             if (_repairToggle.isOn)
             {
-                int repairCost = _deliverySystem.GetRepairCarCost();
+                int repairCost = _deliverySystem.CarRepairAndRefuel.GetRepairCarCost();
                 _repairCostText.text = $"-${repairCost}";
             }
             else
@@ -59,11 +59,11 @@ public class PreMissionPanel : MonoBehaviour
         _deliverySystem.AssignMission(_deliverySystem.WantsToStartMission);
         if (_refuelToggle.isOn)
         {
-            _deliverySystem.RefuelCar();
+            _deliverySystem.CarRepairAndRefuel.RefuelCar();
         }
         if (_repairToggle.isOn)
         {
-            _deliverySystem.RepairCar();
+            _deliverySystem.CarRepairAndRefuel.RepairCar();
         }
         _deliverySystem.WantsToStartMission = null;
     }
