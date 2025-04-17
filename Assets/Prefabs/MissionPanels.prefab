@@ -272,7 +272,7 @@ GameObject:
   - component: {fileID: 5591410051269647300}
   - component: {fileID: 5115519942188394687}
   m_Layer: 5
-  m_Name: StopPanel
+  m_Name: MissionStopPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -69,8 +69,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carControl: {fileID: 0}
-  damageCostMultiplier: 1
-  fuelCostMultiplier: 1
+  damageCostMultiplier: 3
+  fuelCostMultiplier: 2
 --- !u!1001 &101269678648338722
 PrefabInstance:
   m_ObjectHideFlags: 0
