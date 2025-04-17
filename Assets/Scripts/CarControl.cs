@@ -6,25 +6,31 @@ public class CarControl : MonoBehaviour
     [Header("Car Properties")]
     public float motorTorque = 2000f;
     public float brakeTorque = 2000f;
+    public float handbrakeTorque = 5000f;
     public float maxSpeed = 20f;
     public float steeringRange = 30f;
     public float steeringRangeAtMaxSpeed = 10f;
     public Vector3 centerOfGravityOffset = new Vector3(0, -1, 0);
     public float antiRollValue = 1500f;
-    public float FuelTankSize = 100f;
-    public float Fuel = 100f;
     [Tooltip("0 is pure physics, 1 the car will grip in the direction it's facing.")]
     [SerializeField, Range(0, 1)] private float _steerHelper;
+    [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
+    public int money = 0;
+    [Range(0, 100)] public float damagePercentage = 0f;
+
+    [Header("Fuel Properties")]
+    public float FuelTankSize = 100f;
+    public float Fuel = 100f;
+    [SerializeField] private float baseFuelLoss = 0.01f;
+    [SerializeField] private float damageFuelLossMultiplier = 0.0003f;
+    [SerializeField] private float torqueFuelLossMultiplier = 0.00001f;
 
     private WheelControl[] wheels;
     private Rigidbody rigidBody;
     private CarInputActions carControls;
-    
+
     private float oldRotation;
     private float collisionSpeed;
-
-    [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
-    [Range(0, 100)] public float damagePercentage = 0f;
 
     void AddDamagePercentage(float addToDamagePercentage)
     {
@@ -80,6 +86,8 @@ public class CarControl : MonoBehaviour
 
     void FixedUpdate()
     {
+        bool isUsingHandbrake = carControls.Car.Handbrake.ReadValue<float>() > 0.5f;
+
         Vector2 inputVector = carControls.Car.Movement.ReadValue<Vector2>();
         float throttleInput = inputVector.y;
         float steeringInput = inputVector.x;
@@ -96,8 +104,8 @@ public class CarControl : MonoBehaviour
         bool negligibleForwardSpeed = forwardSpeed > -0.1f && forwardSpeed < 0.1f;
         bool signsAreSame = Mathf.Sign(throttleInput) == Mathf.Sign(forwardSpeed);
         bool isAccelerating = (signsAreSame || negligibleForwardSpeed) && throttleInput != 0;
-                
-        ApplyDrive(isAccelerating, canAccelerate, throttleInput, currentMotorTorque);
+
+        ApplyDrive(isAccelerating, canAccelerate, isUsingHandbrake, throttleInput, currentMotorTorque);
         ApplyFuelUsage(isAccelerating, currentMotorTorque);
 
         ApplySteering(steeringInput, currentSteerRange);
@@ -105,7 +113,7 @@ public class CarControl : MonoBehaviour
         AntiRoll();
     }
 
-    private void ApplyDrive(bool isAccelerating, bool canAccelerate, float throttleInput, float currentMotorTorque)
+    private void ApplyDrive(bool isAccelerating, bool canAccelerate, bool isUsingHandbrake, float throttleInput, float currentMotorTorque)
     {
         foreach (var wheel in wheels)
         {
@@ -124,7 +132,15 @@ public class CarControl : MonoBehaviour
             else
             {
                 wheel.WheelCollider.motorTorque = 0f;
-                wheel.WheelCollider.brakeTorque = Mathf.Abs(throttleInput) * brakeTorque;
+                if (!isUsingHandbrake)
+                {
+                    wheel.WheelCollider.brakeTorque = Mathf.Abs(throttleInput) * brakeTorque;
+                }
+            }
+
+            if (isUsingHandbrake)
+            {
+                wheel.WheelCollider.brakeTorque = handbrakeTorque;
             }
         }
     }
@@ -163,7 +179,7 @@ public class CarControl : MonoBehaviour
     {
         float travelL = 1.0f;
         float travelR = 1.0f;
-        foreach(WheelControl wheel in wheels)
+        foreach (WheelControl wheel in wheels)
         {
             WheelCollider wheelCollider = wheel.WheelCollider;
             bool grounded = wheelCollider.GetGroundHit(out WheelHit wheelHit);
@@ -184,7 +200,7 @@ public class CarControl : MonoBehaviour
 
         float antiRollForce = (travelL - travelR) * antiRollValue;
 
-        foreach(WheelControl wheel in wheels)
+        foreach (WheelControl wheel in wheels)
         {
             WheelCollider wheelCollider = wheel.WheelCollider;
             bool grounded = wheelCollider.GetGroundHit(out WheelHit wheelHit);
@@ -200,17 +216,13 @@ public class CarControl : MonoBehaviour
     {
         if (Fuel > 0)
         {
-            float baseFuelLoss = 0.01f;
-            float damageFuelLossMultiplier = 0.0003f;
-            float torqueFuelLossMultiplier = 0.00001f;
-
             float damageFuelLoss = damagePercentage * damageFuelLossMultiplier;
             float torqueFuelLoss = (motorTorque - currentMotorTorque) * torqueFuelLossMultiplier;
 
             float FuelUsage = baseFuelLoss + damageFuelLoss;
             if (isAccelerating)
             {
-                FuelUsage +=  torqueFuelLoss;
+                FuelUsage += torqueFuelLoss;
             }
             Fuel -= FuelUsage;
         }
