@@ -603,15 +603,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   motorTorque: 1500
   brakeTorque: 2000
+  handbrakeTorque: 5000
   maxSpeed: 30
   steeringRange: 30
   steeringRangeAtMaxSpeed: 10
   centerOfGravityOffset: {x: 0, y: -0.5, z: 0.4}
   antiRollValue: 1400
+  _steerHelper: 0.2
+  money: 100
+  damagePercentage: 0
   FuelTankSize: 100
   Fuel: 100
-  _steerHelper: 0.2
-  damagePercentage: 0
+  baseFuelLoss: 0.01
+  damageFuelLossMultiplier: 0.0003
+  torqueFuelLossMultiplier: 0.00001
 --- !u!1 &2741514197912304035
 GameObject:
   m_ObjectHideFlags: 0
