@@ -14,8 +14,8 @@ public class CarRepairAndRefuel : MonoBehaviour
 
     public int GetRefuelCarCost()
     {
-        int baseCost = Mathf.RoundToInt(carControl.FuelTankSize - carControl.Fuel);
-        int cost = Mathf.RoundToInt(baseCost * fuelCostMultiplier);
+        float refuelAmount = carControl.FuelTankSize - carControl.Fuel;
+        int cost = Mathf.RoundToInt(refuelAmount * fuelCostMultiplier);
         return cost;
     }
 
