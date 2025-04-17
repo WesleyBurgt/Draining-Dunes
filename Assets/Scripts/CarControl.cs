@@ -12,10 +12,18 @@ public class CarControl : MonoBehaviour
     public float steeringRangeAtMaxSpeed = 10f;
     public Vector3 centerOfGravityOffset = new Vector3(0, -1, 0);
     public float antiRollValue = 1500f;
-    public float FuelTankSize = 100f;
-    public float Fuel = 100f;
     [Tooltip("0 is pure physics, 1 the car will grip in the direction it's facing.")]
     [SerializeField, Range(0, 1)] private float _steerHelper;
+    [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
+    public int money = 0;
+    [Range(0, 100)] public float damagePercentage = 0f;
+
+    [Header("Fuel Properties")]
+    public float FuelTankSize = 100f;
+    public float Fuel = 100f;
+    [SerializeField] private float baseFuelLoss = 0.01f;
+    [SerializeField] private float damageFuelLossMultiplier = 0.0003f;
+    [SerializeField] private float torqueFuelLossMultiplier = 0.00001f;
 
     private WheelControl[] wheels;
     private Rigidbody rigidBody;
@@ -23,10 +31,6 @@ public class CarControl : MonoBehaviour
 
     private float oldRotation;
     private float collisionSpeed;
-
-    [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
-    public int money = 0;
-    [Range(0, 100)] public float damagePercentage = 0f;
 
     void AddDamagePercentage(float addToDamagePercentage)
     {
@@ -212,10 +216,6 @@ public class CarControl : MonoBehaviour
     {
         if (Fuel > 0)
         {
-            float baseFuelLoss = 0.01f;
-            float damageFuelLossMultiplier = 0.0003f;
-            float torqueFuelLossMultiplier = 0.00001f;
-
             float damageFuelLoss = damagePercentage * damageFuelLossMultiplier;
             float torqueFuelLoss = (motorTorque - currentMotorTorque) * torqueFuelLossMultiplier;
 
