@@ -614,7 +614,7 @@ MonoBehaviour:
   damagePercentage: 0
   FuelTankSize: 100
   Fuel: 100
-  baseFuelLoss: 0.01
+  baseFuelLoss: 0.002
   damageFuelLossMultiplier: 0.0003
   torqueFuelLossMultiplier: 0.00001
 --- !u!1 &2741514197912304035
