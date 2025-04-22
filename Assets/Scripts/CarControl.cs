@@ -32,6 +32,10 @@ public class CarControl : MonoBehaviour
     private float oldRotation;
     private float collisionSpeed;
 
+    [Header("Particle Systems")]
+    public ParticleSystem particleSystem1; 
+    public ParticleSystem particleSystem2; 
+
     void AddDamagePercentage(float addToDamagePercentage)
     {
         float newDamagePercentage = damagePercentage + addToDamagePercentage;
@@ -111,6 +115,19 @@ public class CarControl : MonoBehaviour
         ApplySteering(steeringInput, currentSteerRange);
         SteeringAssist();
         AntiRoll();
+
+        UpdateParticleSpeed();
+    }
+
+    private void UpdateParticleSpeed()
+    {
+        // Haal de main module van de particle systems
+        var main1 = particleSystem1.main;
+        var main2 = particleSystem2.main;
+
+        // Pas de start snelheid van de particles aan op basis van de snelheid van de auto
+        main1.startSpeed = CurrentSpeed * 0.15f; // Pas de factor aan afhankelijk van hoe snel de particles moeten gaan
+        main2.startSpeed = CurrentSpeed * 0.15f;
     }
 
     private void ApplyDrive(bool isAccelerating, bool canAccelerate, bool isUsingHandbrake, float throttleInput, float currentMotorTorque)
