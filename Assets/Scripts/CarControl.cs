@@ -144,9 +144,9 @@ public class CarControl : MonoBehaviour
         AntiRoll();
 
 
-        float pitchMaxSpeed = 80f; // bij deze snelheid moet pitch = 2f zijn
+        float pitchMaxSpeed = 100f; // bij deze snelheid moet pitch = 2f zijn
         float t = Mathf.Clamp01(CurrentSpeed / pitchMaxSpeed);
-        engineAudio.pitch = Mathf.Lerp(0.5f, 2f, t);
+        engineAudio.pitch = Mathf.Lerp(0.5f, 3f, t);
 
 
         
