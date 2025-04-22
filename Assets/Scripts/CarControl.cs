@@ -32,6 +32,11 @@ public class CarControl : MonoBehaviour
     private float oldRotation;
     private float collisionSpeed;
 
+    [Header("Crash Sound")]
+    public AudioClip crashSound;
+    private AudioSource audioSource;
+
+
     void AddDamagePercentage(float addToDamagePercentage)
     {
         float newDamagePercentage = damagePercentage + addToDamagePercentage;
@@ -62,6 +67,8 @@ public class CarControl : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         OffsetCenterOfGravity();
         wheels = GetComponentsInChildren<WheelControl>();
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     private void OffsetCenterOfGravity()
@@ -76,7 +83,13 @@ public class CarControl : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         collisionSpeed = CurrentSpeed;
+
+        if (crashSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(crashSound);
+        }
     }
+
 
     void OnCollisionExit(Collision collision)
     {
