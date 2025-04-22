@@ -51,9 +51,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carControl: {fileID: 0}
-  baseMissionReward: 50
-  missionRewardDistanceMultiplier: 0.5
-  missionRewardSpeedMultiplier: 2
+  baseMissionReward: 20
+  missionRewardDistanceMultiplier: 0.1
+  missionRewardSpeedMultiplier: 1
   CarRepairAndRefuel: {fileID: 0}
   StopCarWarning: 
 --- !u!114 &5228371260764925259
