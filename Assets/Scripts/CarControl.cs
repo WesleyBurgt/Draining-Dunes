@@ -15,6 +15,7 @@ public class CarControl : MonoBehaviour
     [Tooltip("0 is pure physics, 1 the car will grip in the direction it's facing.")]
     [SerializeField, Range(0, 1)] private float _steerHelper;
     [HideInInspector] public float CurrentSpeed { get { return rigidBody.linearVelocity.magnitude * 3.6f; } }
+
     public int money = 0;
     [Range(0, 100)] public float damagePercentage = 0f;
 
@@ -32,9 +33,9 @@ public class CarControl : MonoBehaviour
     private float oldRotation;
     private float collisionSpeed;
 
-    [Header("Crash Sound")]
-    public AudioClip crashSound;
+
     private AudioSource audioSource;
+    private AudioSource engineAudio;
 
 
     void AddDamagePercentage(float addToDamagePercentage)
@@ -67,9 +68,25 @@ public class CarControl : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         OffsetCenterOfGravity();
         wheels = GetComponentsInChildren<WheelControl>();
-        audioSource = GetComponent<AudioSource>();
 
+        // Haal de audioSources uit child GameObjects
+        Transform crashSoundObject = transform.Find("CrashSoundSource");
+        Transform engineSoundObject = transform.Find("EngineSoundSource");
+
+        if (crashSoundObject != null)
+            audioSource = crashSoundObject.GetComponent<AudioSource>();
+        else
+            Debug.LogWarning("CrashSoundSource object niet gevonden!");
+
+        if (engineSoundObject != null)
+        {
+            engineAudio = engineSoundObject.GetComponent<AudioSource>();
+            engineAudio.loop = true;
+        }
+        else
+            Debug.LogWarning("EngineSoundSource object niet gevonden!");
     }
+
 
     private void OffsetCenterOfGravity()
     {
@@ -84,11 +101,12 @@ public class CarControl : MonoBehaviour
     {
         collisionSpeed = CurrentSpeed;
 
-        if (crashSound != null && audioSource != null)
+        if (audioSource != null)
         {
-            audioSource.PlayOneShot(crashSound);
+            audioSource.Play();
         }
     }
+
 
 
     void OnCollisionExit(Collision collision)
@@ -124,6 +142,19 @@ public class CarControl : MonoBehaviour
         ApplySteering(steeringInput, currentSteerRange);
         SteeringAssist();
         AntiRoll();
+
+
+        float pitchMaxSpeed = 80f; // bij deze snelheid moet pitch = 2f zijn
+        float t = Mathf.Clamp01(CurrentSpeed / pitchMaxSpeed);
+        engineAudio.pitch = Mathf.Lerp(0.5f, 2f, t);
+
+
+        
+        if ( !engineAudio.isPlaying)
+        {
+            engineAudio.Play();
+        }
+    
     }
 
     private void ApplyDrive(bool isAccelerating, bool canAccelerate, bool isUsingHandbrake, float throttleInput, float currentMotorTorque)
