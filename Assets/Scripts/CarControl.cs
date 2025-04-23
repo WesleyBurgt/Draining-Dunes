@@ -69,22 +69,14 @@ public class CarControl : MonoBehaviour
         OffsetCenterOfGravity();
         wheels = GetComponentsInChildren<WheelControl>();
 
-        // Haal de audioSources uit child GameObjects
         Transform crashSoundObject = transform.Find("CrashSoundSource");
         Transform engineSoundObject = transform.Find("EngineSoundSource");
 
         if (crashSoundObject != null)
             audioSource = crashSoundObject.GetComponent<AudioSource>();
-        else
-            Debug.LogWarning("CrashSoundSource object niet gevonden!");
 
         if (engineSoundObject != null)
-        {
             engineAudio = engineSoundObject.GetComponent<AudioSource>();
-            engineAudio.loop = true;
-        }
-        else
-            Debug.LogWarning("EngineSoundSource object niet gevonden!");
     }
 
 
@@ -143,18 +135,19 @@ public class CarControl : MonoBehaviour
         SteeringAssist();
         AntiRoll();
 
+        PlayAudio();
+    }
 
-        float pitchMaxSpeed = 100f; // bij deze snelheid moet pitch = 2f zijn
+    private void PlayAudio()
+    {
+        float pitchMaxSpeed = 100f;
         float t = Mathf.Clamp01(CurrentSpeed / pitchMaxSpeed);
         engineAudio.pitch = Mathf.Lerp(0.5f, 3f, t);
 
-
-        
-        if ( !engineAudio.isPlaying)
+        if (!engineAudio.isPlaying)
         {
             engineAudio.Play();
         }
-    
     }
 
     private void ApplyDrive(bool isAccelerating, bool canAccelerate, bool isUsingHandbrake, float throttleInput, float currentMotorTorque)
