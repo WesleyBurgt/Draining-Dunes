@@ -651,8 +651,8 @@ Transform:
   m_GameObject: {fileID: 85320700}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.01546338, z: -0, w: 0.99988043}
-  m_LocalPosition: {x: -891.2, y: -3.6, z: 1022.2}
-  m_LocalScale: {x: 251.46037, y: 26.590992, z: 180.26181}
+  m_LocalPosition: {x: -903.5, y: -3.6, z: 1021.8}
+  m_LocalScale: {x: 276.2795, y: 26.590992, z: 180.26181}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -843,7 +843,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.052221954, y: 0.04311742, z: -0.6352227, w: 0.7693542}
   m_LocalPosition: {x: 380.53162, y: 578.62775, z: -83.62079}
-  m_LocalScale: {x: 33.764687, y: 24628.926, z: 3.7170973}
+  m_LocalScale: {x: 34.217133, y: 24628.926, z: 3.7170973}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 163529194}
@@ -1912,8 +1912,8 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60.000004
+  far clip plane: 2500
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -8578,6 +8578,10 @@ PrefabInstance:
     - target: {fileID: 4084451949434917682, guid: 87624f98f9d33d8438d1dcd45b01f77a, type: 3}
       propertyPath: m_Name
       value: CinemachineCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 4084451949434917682, guid: 87624f98f9d33d8438d1dcd45b01f77a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7140640389503371275, guid: 87624f98f9d33d8438d1dcd45b01f77a, type: 3}
       propertyPath: Target.TrackingTarget
