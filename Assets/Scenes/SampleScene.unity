@@ -2007,7 +2007,7 @@ MonoBehaviour:
   IgnoreTimeScale: 0
   WorldUpOverride: {fileID: 0}
   ChannelMask: -1
-  UpdateMethod: 1
+  UpdateMethod: 2
   BlendUpdateMethod: 1
   LensModeOverride:
     Enabled: 0
@@ -8578,14 +8578,6 @@ PrefabInstance:
     - target: {fileID: 4084451949434917682, guid: 87624f98f9d33d8438d1dcd45b01f77a, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7140640389503371275, guid: 87624f98f9d33d8438d1dcd45b01f77a, type: 3}
-      propertyPath: Lens.FieldOfView
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 7140640389503371275, guid: 87624f98f9d33d8438d1dcd45b01f77a, type: 3}
-      propertyPath: Lens.FarClipPlane
-      value: 2500
       objectReference: {fileID: 0}
     - target: {fileID: 7140640389503371275, guid: 87624f98f9d33d8438d1dcd45b01f77a, type: 3}
       propertyPath: Target.TrackingTarget
