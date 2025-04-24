@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class CarControl : MonoBehaviour
@@ -126,7 +127,14 @@ public class CarControl : MonoBehaviour
         float speedInKmph = CurrentSpeed;
         float minSpeedForParticles = 40f;
 
-        if (isAccelerating)
+        bool isGrounded = wheels.Any(o => o.WheelCollider.isGrounded);
+
+        if (!isGrounded)
+        {
+            particleSystem1.Stop();
+            particleSystem2.Stop();
+        }
+        else if (isAccelerating)
         {
             particleSystem1.Play();
             particleSystem2.Play();
