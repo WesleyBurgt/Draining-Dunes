@@ -142,9 +142,9 @@ public class CarControl : MonoBehaviour
 
     private void PlayAudio()
     {
-        float pitchMaxSpeed = 100f;
+        float pitchMaxSpeed = maxSpeed * 3.6f;
         float t = Mathf.Clamp01(CurrentSpeed / pitchMaxSpeed);
-        engineAudio.pitch = Mathf.Lerp(0.5f, 3f, t);
+        engineAudio.pitch = Mathf.Lerp(0.2f, 1.2f, t);
 
         if (!engineAudio.isPlaying)
         {
