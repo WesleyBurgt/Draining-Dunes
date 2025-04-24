@@ -34,7 +34,8 @@ public class CarControl : MonoBehaviour
 
     [Header("Particle Systems")]
     public ParticleSystem particleSystem1; 
-    public ParticleSystem particleSystem2; 
+    public ParticleSystem particleSystem2;
+
 
     void AddDamagePercentage(float addToDamagePercentage)
     {
@@ -116,18 +117,48 @@ public class CarControl : MonoBehaviour
         SteeringAssist();
         AntiRoll();
 
-        UpdateParticleSpeed();
+
+        ShowParticles(isAccelerating);
     }
 
-    private void UpdateParticleSpeed()
+    private void ShowParticles(bool isAccelerating)
     {
-        // Haal de main module van de particle systems
-        var main1 = particleSystem1.main;
-        var main2 = particleSystem2.main;
+        float speedInKmph = CurrentSpeed;
+        float minSpeedForParticles = 40f;
 
-        // Pas de start snelheid van de particles aan op basis van de snelheid van de auto
-        main1.startSpeed = CurrentSpeed * 0.15f; // Pas de factor aan afhankelijk van hoe snel de particles moeten gaan
-        main2.startSpeed = CurrentSpeed * 0.15f;
+        if (isAccelerating)
+        {
+            particleSystem1.Play();
+            particleSystem2.Play();
+            ChangeParticleSettings();
+        }
+        else if (speedInKmph < minSpeedForParticles) 
+        {
+            particleSystem1.Stop();
+            particleSystem2.Stop();
+        }
+    }
+
+    private void ChangeParticleSettings()
+    {
+        float speedInKmph = CurrentSpeed;
+
+        float rotationX = Mathf.Lerp(0f, -40f, speedInKmph / 100f);
+
+        particleSystem1.transform.rotation = Quaternion.Euler(rotationX, particleSystem1.transform.eulerAngles.y, particleSystem1.transform.eulerAngles.z);
+        particleSystem2.transform.rotation = Quaternion.Euler(rotationX, particleSystem2.transform.eulerAngles.y, particleSystem2.transform.eulerAngles.z);
+
+        var emission1 = particleSystem1.emission;
+        emission1.rateOverTime = Mathf.Lerp(0f, 100f, speedInKmph / 100f);
+
+        var emission2 = particleSystem2.emission;
+        emission2.rateOverTime = Mathf.Lerp(0f, 100f, speedInKmph / 100f);
+
+        var velocityOverLifetime1 = particleSystem1.velocityOverLifetime;
+        velocityOverLifetime1.z = new ParticleSystem.MinMaxCurve(-speedInKmph / 20f);
+
+        var velocityOverLifetime2 = particleSystem2.velocityOverLifetime;
+        velocityOverLifetime2.z = new ParticleSystem.MinMaxCurve(-speedInKmph / 20f);
     }
 
     private void ApplyDrive(bool isAccelerating, bool canAccelerate, bool isUsingHandbrake, float throttleInput, float currentMotorTorque)
