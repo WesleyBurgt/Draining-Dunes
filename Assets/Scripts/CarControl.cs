@@ -42,7 +42,6 @@ public class CarControl : MonoBehaviour
     public ParticleSystem particleSystem1; 
     public ParticleSystem particleSystem2;
 
-
     void AddDamagePercentage(float addToDamagePercentage)
     {
         float newDamagePercentage = damagePercentage + addToDamagePercentage;
@@ -84,7 +83,6 @@ public class CarControl : MonoBehaviour
             engineAudio = engineSoundObject.GetComponent<AudioSource>();
     }
 
-
     private void OffsetCenterOfGravity()
     {
         Vector3 centerOfMass = rigidBody.centerOfMass;
@@ -103,8 +101,6 @@ public class CarControl : MonoBehaviour
             audioSource.Play();
         }
     }
-
-
 
     void OnCollisionExit(Collision collision)
     {
@@ -160,7 +156,6 @@ public class CarControl : MonoBehaviour
     {
         float speedInKmph = CurrentSpeed;
         float minSpeedForParticles = 40f;
-
         bool isGrounded = wheels.Any(o => o.WheelCollider.isGrounded);
 
         if (!isGrounded)
